@@ -6,12 +6,15 @@ func Hello(name, l string) string {
 	if name == "" {
 		name = "World"
 	}
+	return fmt.Sprintf(getPrefix(l), name)
+}
+func getPrefix(l string) string {
 	switch l {
 	case "Spanish":
-		return fmt.Sprintf("Hola, %s!", name)
+		return "Hola, %s!"
 	case "French":
-		return fmt.Sprintf("Bonjour, %s!", name)
+		return "Bonjour, %s!"
 	default:
-		return fmt.Sprintf("Hello, %s!", name)
+		return "Hello, %s!"
 	}
 }
