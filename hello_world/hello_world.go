@@ -2,9 +2,16 @@ package main
 
 import "fmt"
 
-func Hello(s string) string {
-	if s == "" {
-		s = "World"
+func Hello(name, l string) string {
+	if name == "" {
+		name = "World"
 	}
-	return fmt.Sprintf("Hello, %s!", s)
+	switch l {
+	case "Spanish":
+		return fmt.Sprintf("Hola, %s!", name)
+	case "French":
+		return fmt.Sprintf("Bonjour, %s!", name)
+	default:
+		return fmt.Sprintf("Hello, %s!", name)
+	}
 }
