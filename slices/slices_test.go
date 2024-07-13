@@ -1,74 +1,56 @@
 package slices
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestSumSlice(t *testing.T) {
-	t.Run("TestSumSlice", func(t *testing.T) {
-		sum := []int{1, 2, 3, 4, 5}
-		expected := 15
-		actual := SumSlice(sum)
-		assertCorrectness(t, expected, actual)
-	})
-	t.Run("TestSumSlice2", func(t *testing.T) {
-		sum := []int{2, 3, 4, 5}
-		expected := 14
-		actual := SumSlice(sum)
-		assertCorrectness(t, expected, actual)
-	})
-	t.Run("empty slice works", func(t *testing.T) {
-		sum := []int{}
-		expected := 0
-		actual := SumSlice(sum)
-		assertCorrectness(t, expected, actual)
-	})
+	sumSliceTests := []struct {
+		Slice []int
+		want  int
+		desc  string
+	}{
+		{[]int{1, 2, 3, 4, 5}, 15, "sum of 1 to 5"},
+		{[]int{2, 3, 4, 5}, 14, "sum of 2 to 5"},
+		{[]int{}, 0, "empty slice"},
+	}
+	for _, tt := range sumSliceTests {
+		fmt.Println(tt.desc)
+		assertCorrectness(t, tt.want, SumSlice(tt.Slice))
+	}
 }
 
 func TestSumSlices(t *testing.T) {
-	t.Run("TestSumSlices", func(t *testing.T) {
-		s1 := []int{1, 2, 3}
-		s2 := []int{4, 5, 6}
-		expected := 21
-		actual := SumSlices(s1, s2)
-		assertCorrectness(t, expected, actual)
-	})
-	t.Run("variadic works", func(t *testing.T) {
-		s1 := []int{1, 2, 3}
-		s2 := []int{4, 5, 6}
-		s3 := []int{7, 8, 9}
-		expected := 45
-		actual := SumSlices(s1, s2, s3)
-		assertCorrectness(t, expected, actual)
-	})
-	t.Run("empty slice works", func(t *testing.T) {
-		s1 := []int{}
-		expected := 0
-		actual := SumSlices(s1)
-		assertCorrectness(t, expected, actual)
-	})
+	sumSlicesTests := []struct {
+		Slices [][]int
+		want   int
+		desc   string
+	}{
+		{[][]int{{1, 2, 3}, {4, 5, 6}}, 21, "sum of 1 to 6 (2 slices)"},
+		{[][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, 45, "sum of 1 to 9 (3 slices)"},
+		{[][]int{{}}, 0, "empty slice"},
+	}
+	for _, tt := range sumSlicesTests {
+		fmt.Println(tt.desc)
+		assertCorrectness(t, tt.want, SumSlices(tt.Slices...))
+	}
 }
 
 func TestSumSliceTails(t *testing.T) {
-	t.Run("TestSumSliceTails", func(t *testing.T) {
-		s1 := []int{1, 2, 3}
-		s2 := []int{4, 5, 6}
-		expected := 9
-		actual := SumSliceTails(s1, s2)
-		assertCorrectness(t, expected, actual)
-	})
-	t.Run("variable size slice works", func(t *testing.T) {
-		s1 := []int{1, 2, 3}
-		s2 := []int{5, 6}
-		s3 := []int{9}
-		expected := 18
-		actual := SumSliceTails(s1, s2, s3)
-		assertCorrectness(t, expected, actual)
-	})
-	t.Run("empty slice works", func(t *testing.T) {
-		s1 := []int{}
-		expected := 0
-		actual := SumSliceTails(s1)
-		assertCorrectness(t, expected, actual)
-	})
+	testSumSliceTails := []struct {
+		Slices [][]int
+		want   int
+		desc   string
+	}{
+		{[][]int{{1, 2, 3}, {4, 5, 6}}, 9, "sum of slice tails 3 and 6"},
+		{[][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}, 18, "sum of slice tails 3, 6, and 9"},
+		{[][]int{{}}, 0, "empty slice"},
+	}
+	for _, tt := range testSumSliceTails {
+		fmt.Println(tt.desc)
+		assertCorrectness(t, tt.want, SumSliceTails(tt.Slices...))
+	}
 }
 
 func assertCorrectness(t *testing.T, expected, actual int) {
