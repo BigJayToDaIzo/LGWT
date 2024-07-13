@@ -1,0 +1,6 @@
+mode: set
+example.com/iteration/iteration.go:5.48,6.13 1 1
+example.com/iteration/iteration.go:6.13,8.3 1 1
+example.com/iteration/iteration.go:9.2,10.27 2 1
+example.com/iteration/iteration.go:10.27,12.3 1 1
+example.com/iteration/iteration.go:13.2,13.15 1 1
