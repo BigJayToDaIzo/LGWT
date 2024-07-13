@@ -1,0 +1,14 @@
+mode: set
+example.com/slices/slices.go:3.28,5.22 2 1
+example.com/slices/slices.go:5.22,7.3 1 1
+example.com/slices/slices.go:8.2,8.12 1 1
+example.com/slices/slices.go:11.35,13.25 2 1
+example.com/slices/slices.go:13.25,14.18 1 1
+example.com/slices/slices.go:14.18,16.4 1 1
+example.com/slices/slices.go:16.9,18.4 1 1
+example.com/slices/slices.go:20.2,20.12 1 1
+example.com/slices/slices.go:23.39,25.25 2 1
+example.com/slices/slices.go:25.25,26.18 1 1
+example.com/slices/slices.go:26.18,28.4 1 1
+example.com/slices/slices.go:28.9,30.4 1 1
+example.com/slices/slices.go:32.2,32.16 1 1
