@@ -1,5 +1,7 @@
 mode: set
-example.com/geometry/geometry.go:18.41,20.2 1 1
-example.com/geometry/geometry.go:22.38,24.2 1 1
-example.com/geometry/geometry.go:26.36,28.2 1 1
-example.com/geometry/geometry.go:30.33,32.2 1 1
+example.com/geometry/geometry.go:23.41,25.2 1 1
+example.com/geometry/geometry.go:27.38,29.2 1 1
+example.com/geometry/geometry.go:31.40,33.2 1 1
+example.com/geometry/geometry.go:35.36,37.2 1 1
+example.com/geometry/geometry.go:39.33,41.2 1 1
+example.com/geometry/geometry.go:43.35,45.2 1 1
