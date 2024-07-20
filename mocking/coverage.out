@@ -1,0 +1,8 @@
+mode: set
+example.com/mocking/mocking.go:23.39,25.2 1 1
+example.com/mocking/mocking.go:31.49,33.2 1 1
+example.com/mocking/mocking.go:39.35,41.2 1 1
+example.com/mocking/mocking.go:43.62,46.2 2 1
+example.com/mocking/mocking.go:48.42,49.38 1 1
+example.com/mocking/mocking.go:49.38,52.3 2 1
+example.com/mocking/mocking.go:53.2,53.28 1 1
