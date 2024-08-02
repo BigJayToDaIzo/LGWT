@@ -1,55 +1,29 @@
 package geriatrics
 
-type StackOfInts struct {
-	stack []int
+type Stack[T any] struct {
+	stack []T
 }
 
-func (s *StackOfInts) IsEmpty() bool {
+func (s *Stack[T]) IsEmpty() bool {
 	return len(s.stack) == 0
 }
 
-func (s *StackOfInts) Push(i int) {
-	s.stack = append(s.stack, i)
+func (s *Stack[T]) Push(value T) {
+	s.stack = append(s.stack, value)
 }
 
-func (s *StackOfInts) Peek() (int, bool) {
+func (s *Stack[T]) Peek() (T, bool) {
 	if s.IsEmpty() {
-		return 0, false
+		var zero T
+		return zero, false
 	}
 	return s.stack[len(s.stack)-1], true
 }
 
-func (s *StackOfInts) Pop() (int, bool) {
+func (s *Stack[T]) Pop() (T, bool) {
 	if s.IsEmpty() {
-		return 0, false
-	}
-	popped := s.stack[len(s.stack)-1]
-	s.stack = s.stack[:len(s.stack)-1]
-	return popped, true
-}
-
-type StackOfStrings struct {
-	stack []string
-}
-
-func (s *StackOfStrings) IsEmpty() bool {
-	return len(s.stack) == 0
-}
-
-func (s *StackOfStrings) Push(i string) {
-	s.stack = append(s.stack, i)
-}
-
-func (s *StackOfStrings) Peek() (string, bool) {
-	if s.IsEmpty() {
-		return "", false
-	}
-	return s.stack[len(s.stack)-1], true
-}
-
-func (s *StackOfStrings) Pop() (string, bool) {
-	if s.IsEmpty() {
-		return "", false
+		var zero T
+		return zero, false
 	}
 	popped := s.stack[len(s.stack)-1]
 	s.stack = s.stack[:len(s.stack)-1]
