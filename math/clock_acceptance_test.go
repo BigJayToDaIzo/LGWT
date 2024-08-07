@@ -9,6 +9,7 @@ import (
 	"example.com/clock"
 )
 
+// zek is very cool https://github.com/miku/zek
 // SVG was generated 2024-07-30 12:33:09 by jm on dn with zek 0.1.23.
 type SVG struct {
 	XMLName xml.Name `xml:"svg"`

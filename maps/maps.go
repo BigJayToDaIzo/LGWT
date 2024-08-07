@@ -10,7 +10,8 @@ const (
 )
 
 type DictionaryErr string
-
+def 
+var variable string
 func (e DictionaryErr) Error() string {
 	return string(e)
 }
