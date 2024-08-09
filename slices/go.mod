@@ -1,3 +1,3 @@
-module example.com/slices
+module example/slices
 
 go 1.22.4
