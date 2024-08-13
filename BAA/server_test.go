@@ -35,19 +35,14 @@ func TestGETPlayers(t *testing.T) {
 		request := newGetScoreRequest("Oboe")
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, request)
-
-		got := response.Code
-		want := http.StatusNotFound
-
-		if got != want {
-			t.Errorf("got %d, want %d", got, want)
-		}
+		assertResponseCode(t, response.Code, http.StatusNotFound)
 	})
 	t.Run("returns Pepper's score", func(t *testing.T) {
 		request := newGetScoreRequest("Pepper")
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, request)
 
+		assertResponseCode(t, response.Code, http.StatusOK)
 		assertResponseBody(t, response.Body.String(), "20")
 	})
 	t.Run("returns Floyd's score", func(t *testing.T) {
@@ -55,6 +50,7 @@ func TestGETPlayers(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, request)
 
+		assertResponseCode(t, response.Code, http.StatusOK)
 		assertResponseBody(t, response.Body.String(), "10")
 	})
 }
@@ -69,5 +65,12 @@ func assertResponseBody(t testing.TB, got, want string) {
 	t.Helper()
 	if got != want {
 		t.Errorf("response body is wrong, got %q, want %q", got, want)
+	}
+}
+
+func assertResponseCode(t testing.TB, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("response code is wrong, got %d, want %d", got, want)
 	}
 }
