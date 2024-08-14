@@ -88,16 +88,20 @@ func TestStoreWins(t *testing.T) {
 			map[string]int{},
 			nil,
 		}
+		player := "Pepper"
 		server := &PlayerServer{&store}
-		request := newPostWinRequest("Pepper")
+		request := newPostWinRequest(player)
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)
 
+		assertResponseCode(t, response.Code, http.StatusAccepted)
 		if len(store.winCalls) != 1 {
 			t.Errorf("got %d calls to RecordWin, want %d", len(store.winCalls), 1)
 		}
-		assertResponseCode(t, response.Code, http.StatusAccepted)
+		if store.winCalls[0] != player {
+			t.Errorf("did not record correct winner, got %q, want %q", store.winCalls[0], player)
+		}
 	})
 }
 

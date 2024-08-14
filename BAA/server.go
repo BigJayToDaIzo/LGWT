@@ -31,33 +31,32 @@ func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// }
 	// this becomes a prime refactor target, switch on r.Method
 	// this helps us abstract the process win logic out of the ServeHTTP method
+	player := strings.TrimPrefix(r.URL.Path, "/players/")
 	switch r.Method {
 	case http.MethodGet:
-		p.showScore(w, r)
+		p.showScore(w, player)
 	case http.MethodPost:
-		p.processWin(w)
+		p.processWin(w, player)
 	}
 }
 
-func (p *PlayerServer) showScore(w http.ResponseWriter, r *http.Request) {
+func (p *PlayerServer) showScore(w http.ResponseWriter, player string) {
 	// We need the player
-	player := strings.TrimPrefix(r.URL.Path, "/players/")
 	score, ok := p.store.GetPlayerScore(player)
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 	}
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, score)
-
 }
 
-func (p *PlayerServer) processWin(w http.ResponseWriter) {
+func (p *PlayerServer) processWin(w http.ResponseWriter, player string) {
 	// we begin by sending status accepted for everything
 	// remember how this helps us find other weaknesses in our tests!
 	// Next up, sad path of win processing
 	// of course we nest w.WriteHeader(http.StatusAccepted) within the happy branch
 	// playstore is required here
-	p.store.RecordWin("Bob")
+	p.store.RecordWin(player)
 	w.WriteHeader(http.StatusAccepted)
 }
 
