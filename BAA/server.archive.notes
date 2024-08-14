@@ -1,0 +1,28 @@
+// this was abstracted from server.go as TDD evolved this process into the constructor
+// the module was getting hard to navigate but I wanted to keep the notes close
+
+// NOTE: ServeHTTP was made obsolete when we abstracted routing up into PlayerServer struct
+// RIP ServeHTTP, you served us well!
+// func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// 	// First we read from the store (Get)
+// 	// We inject player/score/status into the case methods where needed
+// 	// player := strings.TrimPrefix(r.URL.Path, "/players/")
+// 	// score, ok := p.store.GetPlayerScore(player)
+// 	// Then we write to the store (Post)
+// 	// if r.Method == http.MethodPost {
+// 	// 	// lets give everything StatusAccepted and see how that goes.
+// 	// 	// this will foce us to consider updating other tests to add these assertions
+// 	// 	w.WriteHeader(http.StatusAccepted)
+// 	// 	return
+// 	// }
+// 	// this becomes a prime refactor target, switch on r.Method
+// 	// this helps us abstract the process win logic out of the ServeHTTP method
+// 	// new user requirement for /leage endpoint shows us how fragile assuming player
+// 	// is the assumed endpoint.  ServeMux to the rescue!
+// 	// NOTE: Below was abstracted up into the PlayerServer as part of the object passed in
+// 	// router := http.NewServeMux()
+// 	// // abstract out league/player handlers to PlayerServer methods to keep routing logic out of ServeHTTP
+// 	// router.Handle("/league", http.HandlerFunc(p.leagueHandler))
+// 	// router.Handle("/players/", http.HandlerFunc(p.playerHandler))
+// 	p.router.ServeHTTP(w, r)
+// }

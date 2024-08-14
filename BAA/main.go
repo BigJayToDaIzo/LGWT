@@ -18,6 +18,7 @@ import (
 // https://quii.gitbook.io/learn-go-with-tests/build-an-application/http-server#write-enough-code-to-make-it-pass-6
 
 func main() {
-	server := &PlayerServer{NewInMemoryPlayerStore()}
+	// we need a router now!
+	server := NewPlayerServer(NewInMemoryPlayerStore())
 	log.Fatal(http.ListenAndServe(":5000", server))
 }

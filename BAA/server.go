@@ -7,30 +7,35 @@ import (
 )
 
 type PlayerStore interface {
+	// NOTE: below has been updated with in_memory_player_store.go refactor
 	// these are both only declared in test stubs for now
-	// TDD will show us the way
+	// TDD will show us the way SPOILER: TDD showed us the way to above refactor
 	GetPlayerScore(name string) (int, bool)
 	RecordWin(name string)
 }
 
 type PlayerServer struct {
 	store PlayerStore
+	http.Handler
 }
 
-func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// First we read from the store (Get)
-	// We inject player/score/status into the case methods where needed
-	// player := strings.TrimPrefix(r.URL.Path, "/players/")
-	// score, ok := p.store.GetPlayerScore(player)
-	// Then we write to the store (Post)
-	// if r.Method == http.MethodPost {
-	// 	// lets give everything StatusAccepted and see how that goes.
-	// 	// this will foce us to consider updating other tests to add these assertions
-	// 	w.WriteHeader(http.StatusAccepted)
-	// 	return
-	// }
-	// this becomes a prime refactor target, switch on r.Method
-	// this helps us abstract the process win logic out of the ServeHTTP method
+func NewPlayerServer(store PlayerStore) *PlayerServer {
+	p := new(PlayerServer)
+	p.store = store
+	router := http.NewServeMux()
+	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
+	router.Handle("/players/", http.HandlerFunc(p.playerHandler))
+	p.Handler = router
+
+	return p
+}
+
+// router handler abstraction goes here
+func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+func (p *PlayerServer) playerHandler(w http.ResponseWriter, r *http.Request) {
 	player := strings.TrimPrefix(r.URL.Path, "/players/")
 	switch r.Method {
 	case http.MethodGet:

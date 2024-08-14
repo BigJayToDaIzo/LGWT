@@ -37,7 +37,7 @@ func TestGETPlayers(t *testing.T) {
 		},
 		[]string{},
 	}
-	server := &PlayerServer{&store}
+	server := NewPlayerServer(&store)
 	t.Run("returns 404 on missing players", func(t *testing.T) {
 		request := newGetScoreRequest("Oboe")
 		response := httptest.NewRecorder()
@@ -70,7 +70,7 @@ func TestStoreWins(t *testing.T) {
 		},
 		nil,
 	}
-	server := &PlayerServer{&store}
+	server := NewPlayerServer(&store)
 
 	t.Run("it returns accepted on POST", func(t *testing.T) {
 		// should return 404 on red run, add Pepper to the store
@@ -89,7 +89,7 @@ func TestStoreWins(t *testing.T) {
 			nil,
 		}
 		player := "Pepper"
-		server := &PlayerServer{&store}
+		server := NewPlayerServer(&store)
 		request := newPostWinRequest(player)
 		response := httptest.NewRecorder()
 
@@ -103,6 +103,21 @@ func TestStoreWins(t *testing.T) {
 			t.Errorf("did not record correct winner, got %q, want %q", store.winCalls[0], player)
 		}
 	})
+}
+
+// NEW USER STORY
+// customer wants a /league endpoint
+func TestLeague(t *testing.T) {
+	store := StubPlayerStore{}
+	server := NewPlayerServer(&store)
+	t.Run("it returns 200 on /league", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodGet, "/league", nil)
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+		assertResponseCode(t, response.Code, http.StatusOK)
+	})
+
 }
 
 // Helpers
