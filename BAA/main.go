@@ -5,20 +5,19 @@ import (
 	"net/http"
 )
 
+// below replaced with more permanent in_memory_player_store.go
 // First we tackle in memory
-type InMemoryPlayerStore struct{}
-
-func (i *InMemoryPlayerStore) GetPlayerScore(name string) (int, bool) {
-	return 123, true
-}
-
-func (i *InMemoryPlayerStore) RecordWin(name string) {}
+// func (i *NewInMemoryPlayerStore) GetPlayerScore(name string) (int, bool) {
+// 	return 123, true
+// }
+// func (i *InMemoryPlayerStore) RecordWin(name string) {}
 
 // Then we tackle reading/writing to disk
-
-// THEN we tackle SQLite3
+// THEN we tackle Postgres
+// TODO: Expand this boilerplate REST-API to interface with Postgres
+// https://quii.gitbook.io/learn-go-with-tests/build-an-application/http-server#write-enough-code-to-make-it-pass-6
 
 func main() {
-	server := &PlayerServer{&InMemoryPlayerStore{}}
+	server := &PlayerServer{NewInMemoryPlayerStore()}
 	log.Fatal(http.ListenAndServe(":5000", server))
 }
