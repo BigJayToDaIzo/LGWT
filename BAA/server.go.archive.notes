@@ -26,3 +26,14 @@
 // 	// router.Handle("/players/", http.HandlerFunc(p.playerHandler))
 // 	p.router.ServeHTTP(w, r)
 // }
+
+// below func made obsolete by graduating to a struct with our own ServeHTTP method
+// keeping around for notes and documentation
+// func PlayerServer(w http.ResponseWriter, r *http.Request) {
+// 	// Parse the request url for player name
+// 	// NOTE: TDD has brought us to ROUTING before we have
+// 	// even thought about the data structure giving us much
+// 	// smaller incremental steps to the solution
+// 	player := strings.TrimPrefix(r.URL.Path, "/players/")
+// 	fmt.Fprint(w, GetPlayerScore(player))
+// }

@@ -16,6 +16,8 @@ type PlayerStore interface {
 
 type PlayerServer struct {
 	store PlayerStore
+	// Embedding the router
+	// THIS embedding is how we retired the ServeHTTP archive notes/code
 	http.Handler
 }
 
@@ -64,14 +66,3 @@ func (p *PlayerServer) processWin(w http.ResponseWriter, player string) {
 	p.store.RecordWin(player)
 	w.WriteHeader(http.StatusAccepted)
 }
-
-// below func made obsolete by graduating to a struct with our own ServeHTTP method
-// keeping around for notes and documentation
-// func PlayerServer(w http.ResponseWriter, r *http.Request) {
-// 	// Parse the request url for player name
-// 	// NOTE: TDD has brought us to ROUTING before we have
-// 	// even thought about the data structure giving us much
-// 	// smaller incremental steps to the solution
-// 	player := strings.TrimPrefix(r.URL.Path, "/players/")
-// 	fmt.Fprint(w, GetPlayerScore(player))
-// }
