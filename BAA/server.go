@@ -54,11 +54,11 @@ func (p *PlayerServer) showScore(w http.ResponseWriter, r *http.Request) {
 func (p *PlayerServer) processWin(w http.ResponseWriter) {
 	// we begin by sending status accepted for everything
 	// remember how this helps us find other weaknesses in our tests!
-	w.WriteHeader(http.StatusAccepted)
 	// Next up, sad path of win processing
 	// of course we nest w.WriteHeader(http.StatusAccepted) within the happy branch
 	// playstore is required here
-	p.store.RecordWin("Pepper")
+	p.store.RecordWin("Bob")
+	w.WriteHeader(http.StatusAccepted)
 }
 
 // below func made obsolete by graduating to a struct with our own ServeHTTP method
