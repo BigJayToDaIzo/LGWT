@@ -6,6 +6,10 @@ We have been tasked to create a web server where users can track how many games 
 New customer requirement: (scope creep)
 3) GET /league should return an array of players in the league
 
+New scope creep:
+4) GET /league should return a sorted DESC by score array of players
+5) In memory is no longer adequate, need perm storage. Local disk?
+
 Chicken and egg problem
 
 How can we incrementally build this?  We can't GET a player without having stored something and it
