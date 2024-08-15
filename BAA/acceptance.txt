@@ -3,6 +3,9 @@ We have been tasked to create a web server where users can track how many games 
 1) GET /players/{name} should return a number indicating total number of wins
 2) POST /players/{name} should record a win for that name, incrementing for every subsequent POST
 
+New customer requirement: (scope creep)
+3) GET /league should return an array of players in the league
+
 Chicken and egg problem
 
 How can we incrementally build this?  We can't GET a player without having stored something and it

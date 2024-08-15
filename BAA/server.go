@@ -1,9 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
+)
+
+const (
+	jsonContentType = "application/json"
 )
 
 type PlayerStore interface {
@@ -12,6 +17,7 @@ type PlayerStore interface {
 	// TDD will show us the way SPOILER: TDD showed us the way to above refactor
 	GetPlayerScore(name string) (int, bool)
 	RecordWin(name string)
+	GetLeague() []Player
 }
 
 type PlayerServer struct {
@@ -19,6 +25,11 @@ type PlayerServer struct {
 	// Embedding the router
 	// THIS embedding is how we retired the ServeHTTP archive notes/code
 	http.Handler
+}
+
+type Player struct {
+	Name string
+	Wins int
 }
 
 func NewPlayerServer(store PlayerStore) *PlayerServer {
@@ -34,7 +45,17 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 
 // router handler abstraction goes here
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", jsonContentType)
+	json.NewEncoder(w).Encode(p.store.GetLeague())
 	w.WriteHeader(http.StatusOK)
+}
+
+func (p *PlayerServer) getLeagueTable() []Player {
+	return []Player{
+		{"Cleo", 32},
+		{"Chris", 20},
+		{"Tiest", 14},
+	}
 }
 
 func (p *PlayerServer) playerHandler(w http.ResponseWriter, r *http.Request) {
