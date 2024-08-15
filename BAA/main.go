@@ -1,10 +1,5 @@
 package main
 
-import (
-	"log"
-	"net/http"
-)
-
 // below replaced with more permanent in_memory_player_store.go
 // First we tackle in memory
 // func (i *NewInMemoryPlayerStore) GetPlayerScore(name string) (int, bool) {
@@ -19,6 +14,6 @@ import (
 
 func main() {
 	// we need a router now!
-	server := NewPlayerServer(NewInMemoryPlayerStore())
-	log.Fatal(http.ListenAndServe(":5000", server))
+	// server := NewPlayerServer(NewInMemoryPlayerStore())
+	// log.Fatal(http.ListenAndServe(":5000", server))
 }

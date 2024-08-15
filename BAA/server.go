@@ -17,7 +17,7 @@ type PlayerStore interface {
 	// TDD will show us the way SPOILER: TDD showed us the way to above refactor
 	GetPlayerScore(name string) (int, bool)
 	RecordWin(name string)
-	GetLeague() []Player
+	GetLeague() League
 }
 
 type PlayerServer struct {
