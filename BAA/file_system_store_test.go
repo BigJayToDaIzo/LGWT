@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"os"
 	"testing"
 )
@@ -12,7 +11,7 @@ func TestFileSystemStore(t *testing.T) {
 		{"Name": "Cleo", "Wins": 10},
 		{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
-		store := FileSystemPlayerStore{database}
+		store := assertFileStore(t, database)
 
 		got := store.GetLeague()
 		want := []Player{
@@ -30,7 +29,7 @@ func TestFileSystemStore(t *testing.T) {
 		{"Name": "Cleo", "Wins": 10},
 		{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
-		store := FileSystemPlayerStore{database}
+		store := assertFileStore(t, database)
 		got, _ := store.GetPlayerScore("Chris")
 		want := 33
 
@@ -41,7 +40,7 @@ func TestFileSystemStore(t *testing.T) {
 		{"Name": "Cleo", "Wins": 10},
 		{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
-		store := FileSystemPlayerStore{database}
+		store := assertFileStore(t, database)
 		store.RecordWin("Chris")
 		got, _ := store.GetPlayerScore("Chris")
 		want := 34
@@ -52,12 +51,17 @@ func TestFileSystemStore(t *testing.T) {
 		{"Name": "Cleo", "Wins": 10},
 		{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
-		store := FileSystemPlayerStore{database}
+		store := assertFileStore(t, database)
 		store.RecordWin("Pepper")
 		got, _ := store.GetPlayerScore("Pepper")
 		want := 1
 		assertEquals(t, got, want)
 
+	})
+	t.Run("works with an empty file", func(t *testing.T) {
+		database, cleanDatabase := createTempFile(t, "")
+		defer cleanDatabase()
+		assertFileStore(t, database)
 	})
 }
 
@@ -69,7 +73,16 @@ func assertEquals(t *testing.T, got, want int) {
 	}
 }
 
-func createTempFile(t testing.TB, initialData string) (io.ReadWriteSeeker, func()) {
+func assertFileStore(t *testing.T, db *os.File) *FileSystemPlayerStore {
+	t.Helper()
+	store, err := NewFileSystemPlayerStore(db)
+	if err != nil {
+		t.Errorf("problem creating file system player store, %v", err)
+	}
+	return store
+}
+
+func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 	t.Helper()
 
 	tmpfile, err := os.CreateTemp("", "db")

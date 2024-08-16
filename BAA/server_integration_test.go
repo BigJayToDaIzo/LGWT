@@ -12,9 +12,12 @@ import (
 func TestRecordingWinsAndRetreivingThem(t *testing.T) {
 	// we now retire our temporary In Memory Store.  Let us slot in the FileStore now
 	// server := NewPlayerServer(NewInMemoryPlayerStore())
-	database, cleanDatabase := createTempFile(t, "")
+	database, cleanDatabase := createTempFile(t, `[]`)
 	defer cleanDatabase()
-	store := &FileSystemPlayerStore{database}
+	// things broke here because of an empty file.  Now we write the test to ensure
+	// we properly handle an empty file.
+	store := assertFileStore(t, database)
+
 	server := NewPlayerServer(store)
 	player := "Pepper"
 
