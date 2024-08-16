@@ -10,7 +10,12 @@ import (
 // this integration test can be reused for local disk stores, database stores, etc
 // often in memory stores are a valuable option for APIs anyway.  Might not delete later.
 func TestRecordingWinsAndRetreivingThem(t *testing.T) {
-	server := NewPlayerServer(NewInMemoryPlayerStore())
+	// we now retire our temporary In Memory Store.  Let us slot in the FileStore now
+	// server := NewPlayerServer(NewInMemoryPlayerStore())
+	database, cleanDatabase := createTempFile(t, "")
+	defer cleanDatabase()
+	store := &FileSystemPlayerStore{database}
+	server := NewPlayerServer(store)
 	player := "Pepper"
 
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
