@@ -20,9 +20,9 @@ func NewLeague(rdr io.Reader) ([]Player, error) {
 
 // League methods
 func (l League) Find(name string) *Player {
-	for i, p := range l {
-		if p.Name == name {
-			return &l[i]
+	for idx, player := range l {
+		if player.Name == name {
+			return &l[idx]
 		}
 	}
 	return nil
