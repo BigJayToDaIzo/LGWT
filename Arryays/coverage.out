@@ -2,3 +2,11 @@ mode: set
 example.com/arryays/sum.go:3.29,5.33 2 1
 example.com/arryays/sum.go:5.33,7.3 1 1
 example.com/arryays/sum.go:8.2,8.12 1 1
+example.com/arryays/sum.go:11.39,14.30 3 1
+example.com/arryays/sum.go:14.30,16.3 1 1
+example.com/arryays/sum.go:17.2,17.13 1 1
+example.com/arryays/sum.go:21.45,23.31 2 1
+example.com/arryays/sum.go:23.31,24.18 1 1
+example.com/arryays/sum.go:24.18,26.4 1 1
+example.com/arryays/sum.go:26.9,29.4 2 1
+example.com/arryays/sum.go:31.2,31.13 1 1
