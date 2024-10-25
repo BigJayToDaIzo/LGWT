@@ -17,13 +17,6 @@ func TestSum(t *testing.T) {
 
 }
 
-// func checkEquality(t *testing.T, got, want []int) {
-// 	t.Helper()
-// 	if !reflect.DeepEqual(got, want) {
-// 		t.Errorf("got %v want %v", got, want)
-// 	}
-// }
-
 func TestSumAll(t *testing.T) {
 	checkEquality := func(t *testing.T, got, want []int) {
 		t.Helper()
@@ -67,3 +60,10 @@ func TestSumAllTails(t *testing.T) {
 		checkEquality(t, got, want)
 	})
 }
+
+// func checkEquality(t *testing.T, got, want []int) {
+// 	t.Helper()
+// 	if !reflect.DeepEqual(got, want) {
+// 		t.Errorf("got %v want %v", got, want)
+// 	}
+// }
