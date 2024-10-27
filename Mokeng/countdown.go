@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"os"
 	"time"
 )
 
@@ -13,26 +12,24 @@ type Sleeper interface {
 	Sleep()
 }
 
-type DefaultSleeper struct{}
-
-func (s *DefaultSleeper) Sleep() {
-	time.Sleep(1 * time.Second)
+type ConfigurableSleeper struct {
+	duration time.Duration
+	sleep    func(time.Duration)
 }
+
+func (cs *ConfigurableSleeper) Sleep() {
+	cs.sleep(cs.duration)
+}
+
+const countdownStart = 3
+const finalWord = "Go!"
 
 func Countdown(w io.Writer, s Sleeper) {
 	// dependency on time.Sleep slowing test suite, MUST MOK
 	// What would we name a Mock Sleep? Sleeper!
-	for i := 3; i > 0; i-- {
+	for i := countdownStart; i > 0; i-- {
 		w.Write([]byte(fmt.Sprintf("%d\n", i)))
 		s.Sleep()
 	}
-	w.Write([]byte("Go!"))
-}
-
-func main() {
-	// stdout for main
-	sleeper := &DefaultSleeper{}
-	Countdown(os.Stdout, sleeper)
-	// http module next? Countdown FOR TEH WEBZ?
-	// wooo, COUNTDOWN FOR THE
+	w.Write([]byte(fmt.Sprintf("%s\n", finalWord)))
 }
