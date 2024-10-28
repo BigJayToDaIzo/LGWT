@@ -6,15 +6,25 @@ import (
 	"time"
 )
 
-func Racer(urlA, urlB string) (string, error) {
+// Give em that 10 second DEFAULT
+var tenSecondTimeout = 10 * time.Second
+
+func Racer(a, b string) (string, error) {
+	return ConfigurableRacer(a, b, tenSecondTimeout)
+}
+
+// AND a configurable option for testing
+// your users AND test suite will love this ish
+func ConfigurableRacer(a, b string, timeout time.Duration) (string, error) {
 	select {
-	case <-ping(urlA):
-		return urlA, nil
-	case <-ping(urlB):
-		return urlB, nil
-	case <-time.After(10 * time.Second):
-		return "", fmt.Errorf("timed out waiting for %s and %s", urlA, urlB)
+	case <-ping(a):
+		return a, nil
+	case <-ping(b):
+		return b, nil
+	case <-time.After(timeout):
+		return "", fmt.Errorf("timed out waiting for %s and %s", a, b)
 	}
+
 }
 
 // struct{} is the lightest aka empty type we can pass

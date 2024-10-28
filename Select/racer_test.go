@@ -17,17 +17,20 @@ func TestRacer(t *testing.T) {
 		fastURL := fastServer.URL
 
 		want := fastURL
-		got, _ := Racer(slowURL, fastURL)
+		got, err := Racer(slowURL, fastURL)
+		if err != nil {
+			t.Errorf("unexpected error %v:", err)
+		}
 		if got != want {
 			t.Errorf("got %q, want %q", got, want)
 		}
 	})
-	t.Run("times out within 10s", func(t *testing.T) {
-		serverA := makeDelayedServer(11 * time.Second)
-		serverB := makeDelayedServer(12 * time.Second)
+	t.Run("times out appropriately", func(t *testing.T) {
+		serverA := makeDelayedServer(20 * time.Millisecond)
+		serverB := makeDelayedServer(20 * time.Millisecond)
 		defer serverA.Close()
 		defer serverB.Close()
-		_, err := Racer(serverA.URL, serverB.URL)
+		_, err := ConfigurableRacer(serverA.URL, serverB.URL, time.Duration(10*time.Millisecond))
 		if err == nil {
 			t.Error("expected error, none recieved")
 		}
