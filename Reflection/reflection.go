@@ -1,6 +1,8 @@
 package main
 
-import "reflect"
+import (
+	"reflect"
+)
 
 func walk(x any, fn func(in string)) {
 	// detect pointers before we get to
@@ -35,7 +37,21 @@ func walk(x any, fn func(in string)) {
 		for _, key := range val.MapKeys() {
 			walkVal(val.MapIndex(key))
 		}
+	case reflect.Chan:
+		for {
+			if v, ok := val.Recv(); ok {
+				walkVal(v)
+			} else {
+				break
+			}
+		}
+	case reflect.Func:
+		valFnResult := val.Call(nil)
+		for _, res := range valFnResult {
+			walkVal(res)
+		}
 	}
+
 }
 
 func getVal(x any) reflect.Value {
