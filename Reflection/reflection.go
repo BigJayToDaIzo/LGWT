@@ -6,24 +6,34 @@ func walk(x any, fn func(in string)) {
 	// detect pointers before we get to
 	// the NumField() call in for loop
 	val := getVal(x)
-
-	// now slices giving us attitude
-	// walk them and short circuit return when done
-	if val.Kind() == reflect.Slice {
-		for i := 0; i < val.Len(); i++ {
-			walk(val.Index(i).Interface(), fn)
-		}
-		return
+	// very clever abstraction keeping the fn call global
+	walkVal := func(value reflect.Value) {
+		walk(value.Interface(), fn)
 	}
 
-	for i := 0; i < val.NumField(); i++ {
-		field := val.Field(i)
-		switch field.Kind() {
-		case reflect.Struct:
-			// recurse like a BOSS
-			walk(field.Interface(), fn)
-		case reflect.String:
-			fn(field.String())
+	// recursion allows walk to pass nested things
+	// recursively back through the switch statement
+	// until they've all made it through the last case
+	// very water fountainy in nature
+	// unevaporated water is pumped right back out the top again
+	// to tumble down each layer until it finds the one where
+	// the sun deems it evaporation worthy (case doesnt recurse)
+	switch val.Kind() {
+	case reflect.String:
+		fn(val.String())
+	case reflect.Struct:
+		for i := 0; i < val.NumField(); i++ {
+			walkVal(val.Field(i))
+		}
+	case reflect.Slice, reflect.Array:
+		// now slices giving us attitude
+		for i := 0; i < val.Len(); i++ {
+			walkVal(val.Index(i))
+		}
+	case reflect.Map:
+		// and of course the heavy lifting map
+		for _, key := range val.MapKeys() {
+			walkVal(val.MapIndex(key))
 		}
 	}
 }
