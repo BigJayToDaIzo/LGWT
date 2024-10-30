@@ -27,15 +27,27 @@ func ConvertToRomanBigEndian(arabic int) string {
 		case arabic/100 >= 1:
 			res.WriteString("C")
 			arabic -= 100
+		case arabic/90 >= 1:
+			res.WriteString("XC")
+			arabic -= 90
 		case arabic/50 >= 1:
 			res.WriteString("L")
 			arabic -= 50
+		case arabic/40 >= 1:
+			res.WriteString("XL")
+			arabic -= 40
 		case arabic/10 >= 1:
 			res.WriteString("X")
 			arabic -= 10
+		case arabic/9 >= 1:
+			res.WriteString("IX")
+			arabic -= 9
 		case arabic/5 >= 1:
 			res.WriteString("V")
 			arabic -= 5
+		case arabic/4 >= 1:
+			res.WriteString("IV")
+			arabic -= 4
 		default:
 			for i := 0; i < arabic; i++ {
 				res.WriteString("I")

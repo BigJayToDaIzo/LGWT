@@ -91,34 +91,60 @@ func TestRomanNumerals(t *testing.T) {
 
 func TestRomanNumeralsBigEndian(t *testing.T) {
 	cases := []struct {
-		Description string
-		Arabic      int
-		Want        string
+		Arabic    int
+		Assertion string
+		Want      string
 	}{
 		// addition through the symbols
-		{"1000 converts to M", 1000, "M"},
-		{"2000 converts to MM", 2000, "MM"},
-		{"3000 converts to MMM", 3000, "MMM"},
-		{"3500 converts to MMMD", 3500, "MMMD"},
-		{"3600 converts to MMMDC", 3600, "MMMDC"},
-		{"3700 converts to MMMDCC", 3700, "MMMDCC"},
-		{"3800 converts to MMMDCCC", 3800, "MMMDCCC"},
-		{"3850 converts to MMMDCCCL", 3850, "MMMDCCCL"},
-		{"3900 converts to MMMCM", 3900, "MMMCM"},
-		{"3910 converts to MMMCMX", 3910, "MMMCMX"},
-		{"3920 converts to MMMCMXX", 3920, "MMMCMXX"},
-		{"3930 converts to MMMCMXXX", 3930, "MMMCMXXX"},
-		{"3935 converts to MMMCMXXXV", 3935, "MMMCMXXXV"},
-		{"3936 converts to MMCMXXXVI", 2936, "MMCMXXXVI"},
-		{"3938 converts to MMMCMXXXVIII", 3938, "MMMCMXXXVIII"},
+		{1000, "converts to M", "M"},
+		{2000, "converts to MM", "MM"},
+		{3000, "converts to MMM", "MMM"},
+		{3500, "converts to MMMD", "MMMD"},
+		{3600, "converts to MMMDC", "MMMDC"},
+		{3700, "converts to MMMDCC", "MMMDCC"},
+		{3800, "converts to MMMDCCC", "MMMDCCC"},
+		{3850, "converts to MMMDCCCL", "MMMDCCCL"},
+		{3900, "converts to MMMCM", "MMMCM"},
+		{3910, "converts to MMMCMX", "MMMCMX"},
+		{3920, "converts to MMMCMXX", "MMMCMXX"},
+		{3930, "converts to MMMCMXXX", "MMMCMXXX"},
+		{3935, "converts to MMMCMXXXV", "MMMCMXXXV"},
+		{3936, "converts to MMMCMXXXVI", "MMMCMXXXVI"},
+		{3938, "converts to MMMCMXXXVIII", "MMMCMXXXVIII"},
 		// time to bring in subtraction
-		{"3400 converts to MMMCD", 3400, "MMMCD"},
+		{3400, "converts to MMMCD", "MMMCD"},
+		{3440, "converts to MMMCDXL", "MMMCDXL"},
+		{3444, "converts to MMMCDXLIV", "MMMCDXLIV"},
+		// did we do it?  Let's PLAY!
+		{3442, "converts to MMMCDXLII", "MMMCDXLII"},
+		{3441, "converts to MMMCDXLI", "MMMCDXLI"},
+		// let is begin again near the lost trail of 3444
+		// now that subtraction is implemented lets lean back into the bigendian thing
+		// and continue toward 3999 on the 4s and 9s
+		{3990, "converts to MMMCMXC", "MMMCMXC"},
+		{3994, "converts to MMMCMXCIV", "MMMCMXCIV"},
+		{3999, "converts to MMMCMXCIX", "MMMCMXCIX"},
+
+		// check backwards from 1000
+		{999, "converts to CMXCIX", "CMXCIX"},
+		{895, "converts to DCCCXCV", "DCCCXCV"},
+		{749, "converts to DCCXLIX", "DCCXLIX"},
+		{694, "converts to DCXCIV", "DCXCIV"},
+		{544, "converts to DXLIV", "DXLIV"},
+		// {3940, "converts to MMMCMXL", "MMMCMXL"},
+		// {3944, "converts to MMMCMXLIV", "MMMCMXLIV"},
+		// {3945, "converts to MMMCMXLV", "MMMCMXLV"},
+		// {3949, "converts to MMMCMXLIX", "MMMCMXLIX"},
+		// dare we try the TIPPY TOP now that subrtaction has been (hopefully) wroked in?
+		// yes, yes we should (documention, no, no we should not have, we ended up back at 3444)
+		// {3999, "converts to MMMCMXCIX", "MMMCMXCIX"},
+		// predictably borkied 😂
 	}
 	for _, test := range cases {
-		t.Run(test.Description, func(t *testing.T) {
+		t.Run(test.Assertion, func(t *testing.T) {
 			got := ConvertToRomanBigEndian(test.Arabic)
 			if got != test.Want {
-				t.Errorf("got %q, want %q", got, test.Want)
+				t.Errorf("got arabic: %d %q, want %q", test.Arabic, got, test.Want)
 			}
 		})
 	}
