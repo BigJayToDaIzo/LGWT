@@ -13,11 +13,20 @@ type Point struct {
 }
 
 // temp configuration points set as const
-const secondHandLen = 90
-const minuteHandLen = 80
-const hourHandLen = 50
-const x_originPoint = 150
-const y_originPoint = 150
+const (
+	secondHandLen = 90
+	minuteHandLen = 80
+	hourHandLen   = 50
+	x_originPoint = 150
+	y_originPoint = 150
+
+	secondsInHalfClock = 30
+	secondsInClock     = 2 * secondsInHalfClock
+	minutesInHalfClock = 30
+	minutesInClock     = 2 * minutesInHalfClock
+	hoursInHalfClock   = 6
+	hoursInClock       = 2 * hoursInHalfClock
+)
 
 func SVGWriter(w io.Writer, t time.Time) {
 	io.WriteString(w, svgStart)
@@ -36,9 +45,7 @@ const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
      height="100%"
      viewBox="0 0 300 300"
      version="2.0">`
-
 const bezel = `<circle cx="150" cy="150" r="100" style="fill:#fff;stroke:#000;stroke-width:5px;"/>`
-
 const svgEnd = `</svg>`
 
 func hourHand(w io.Writer, t time.Time) {
@@ -58,16 +65,6 @@ func minuteHand(w io.Writer, t time.Time) {
 
 func MinuteHand(t time.Time) Point {
 	return makeHand(minuteHandPoint(t), minuteHandLen)
-	// pt := minuteHandPoint(t)
-	// //1 scale from unit circle to svg
-	// pt = Point{pt.X * minuteHandLen, pt.Y * minuteHandLen} //scale to minuteHandLen
-	// //2 Flip triangle over the X axis to account for
-	// // TL Corner origin of SVG
-	// pt = Point{pt.X, -pt.Y} // flip the y
-	// //3 translate entire point to the center of the svg
-	// // also not in the TL corner
-	// pt = Point{pt.X + x_originPoint, pt.Y + y_originPoint}
-	// return pt
 }
 
 func secondHand(w io.Writer, t time.Time) {
@@ -78,17 +75,6 @@ func secondHand(w io.Writer, t time.Time) {
 
 func SecondHand(t time.Time) Point {
 	return makeHand(secondHandPoint(t), secondHandLen)
-	// pt := secondHandPoint(t)
-	// //1 scale from unit circle to svg
-	// pt = Point{pt.X * secondHandLen, pt.Y * secondHandLen} //scale to secondHandLen
-	//
-	// //2 Flip triangle over the X axis to account for
-	// // TL Corner origin of SVG
-	// pt = Point{pt.X, -pt.Y} // flip the y
-	// //3 translate entire point to the center of the svg
-	// // also not in the TL corner
-	// pt = Point{pt.X + x_originPoint, pt.Y + y_originPoint}
-	// return pt
 }
 
 func makeHand(p Point, length float64) Point {
@@ -111,17 +97,17 @@ func secondHandPoint(t time.Time) Point {
 
 // lets do it again and make the hour hand move REAL slow
 func hoursInRadians(t time.Time) float64 {
-	return (minutesInRadians(t) / 12) + (math.Pi / (6 / float64(t.Hour()%12)))
+	return (minutesInRadians(t) / hoursInClock) + (math.Pi / (hoursInHalfClock / float64(t.Hour()%12)))
 }
 
 // let's move the minute hand each second instead of
 // on the minute marker
 func minutesInRadians(t time.Time) float64 {
-	return (secondsInRadians(t) / 60) + (math.Pi / (30 / float64(t.Minute())))
+	return (secondsInRadians(t) / secondsInClock) + (math.Pi / (minutesInHalfClock / float64(t.Minute())))
 }
 
 func secondsInRadians(t time.Time) float64 {
-	return (math.Pi / (30 / (float64(t.Second()))))
+	return (math.Pi / (secondsInHalfClock / (float64(t.Second()))))
 }
 
 func angleToPoint(angle float64) Point {
