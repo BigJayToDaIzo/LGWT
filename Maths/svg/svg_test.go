@@ -1,12 +1,10 @@
-package clockface_test
+package svg
 
 import (
 	"bytes"
 	"encoding/xml"
 	"testing"
 	"time"
-
-	"example.com/clockface"
 )
 
 type SVG struct {
@@ -45,7 +43,7 @@ func TestSVGWriterHourHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			clockface.SVGWriter(&b, c.time)
+			SVGWriter(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
@@ -68,7 +66,7 @@ func TestSVGWriterMinuteHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			clockface.SVGWriter(&b, c.time)
+			SVGWriter(&b, c.time)
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)
 			if !containsLine(c.line, svg.Line) {
@@ -94,7 +92,7 @@ func TestSVGWriterSecondHand(t *testing.T) {
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			b := bytes.Buffer{}
-			clockface.SVGWriter(&b, c.time)
+			SVGWriter(&b, c.time)
 
 			svg := SVG{}
 			xml.Unmarshal(b.Bytes(), &svg)

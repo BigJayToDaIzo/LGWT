@@ -1,16 +1,12 @@
 mode: set
-example.com/clockface/clock.go:31.42,38.2 6 1
-example.com/clockface/clock.go:51.41,55.2 2 1
-example.com/clockface/clock.go:57.34,59.2 1 0
-example.com/clockface/clock.go:61.43,64.2 2 1
-example.com/clockface/clock.go:66.36,68.2 1 0
-example.com/clockface/clock.go:70.43,74.2 2 1
-example.com/clockface/clock.go:76.36,78.2 1 0
-example.com/clockface/clock.go:80.46,84.2 3 1
-example.com/clockface/clock.go:86.39,88.2 1 1
-example.com/clockface/clock.go:90.41,92.2 1 1
-example.com/clockface/clock.go:94.41,96.2 1 1
-example.com/clockface/clock.go:99.42,101.2 1 1
-example.com/clockface/clock.go:105.44,107.2 1 1
-example.com/clockface/clock.go:109.44,111.2 1 1
-example.com/clockface/clock.go:113.40,117.2 3 1
+example.com/clockface/clock.go:33.41,37.2 2 0
+example.com/clockface/clock.go:39.43,42.2 2 0
+example.com/clockface/clock.go:44.43,48.2 2 0
+example.com/clockface/clock.go:50.46,54.2 3 0
+example.com/clockface/clock.go:56.39,58.2 1 1
+example.com/clockface/clock.go:60.41,62.2 1 1
+example.com/clockface/clock.go:64.41,66.2 1 1
+example.com/clockface/clock.go:69.42,71.2 1 1
+example.com/clockface/clock.go:75.44,77.2 1 1
+example.com/clockface/clock.go:79.44,81.2 1 1
+example.com/clockface/clock.go:83.40,87.2 3 1
