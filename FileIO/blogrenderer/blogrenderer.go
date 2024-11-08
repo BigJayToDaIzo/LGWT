@@ -2,15 +2,17 @@ package blogrenderer
 
 import (
 	"embed"
+	"errors"
 	"fmt"
 	"html/template"
 	"io"
+	"strings"
 )
 
 // temp configuration point read in from file/http eventually
 var (
 	//go:embed "templates/*"
-	postTemplate embed.FS
+	postTemplates embed.FS
 )
 
 type Post struct {
@@ -18,12 +20,29 @@ type Post struct {
 	Tags                     []string
 }
 
-func Render(w io.Writer, post Post) error {
-	templ, err := template.ParseFS(postTemplate, "templates/*.gohtml")
+func (p Post) SanitisedTitle() string {
+	return strings.ToLower(strings.Replace(p.Title, " ", "-", -1))
+}
+
+// improve benchmarks
+type PostRenderer struct {
+	templ *template.Template
+}
+
+func NewPostRenderer() (*PostRenderer, error) {
+	templ, err := template.ParseFS(postTemplates, "templates/*.gohtml")
 	if err != nil {
-		return fmt.Errorf("error parsing template: %w", err)
+		return nil, errors.New("error parsing templates from filesys")
 	}
-	if err := templ.Execute(w, post); err != nil {
+	return &PostRenderer{templ: templ}, nil
+}
+
+func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
+	return r.templ.ExecuteTemplate(w, "index.gohtml", posts)
+}
+
+func (r *PostRenderer) Render(w io.Writer, post Post) error {
+	if err := r.templ.ExecuteTemplate(w, "blog.gohtml", post); err != nil {
 		return fmt.Errorf("error executing template: %w", err)
 	}
 	return nil
