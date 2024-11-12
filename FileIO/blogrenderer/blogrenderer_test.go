@@ -36,7 +36,8 @@ func TestRender(t *testing.T) {
 			t.Fatal("unexpected error rendering index", err)
 		}
 		got := buf.String()
-		want := `<ol><li><a href="/post/hello-world">Hello World</a></li><li><a href="/post/hello-world-2">Hello World 2</a></li></ol>`
+		want := `<ol><li><a href="/post/hello-world">Hello World</a></li><li><a href="/post/hello-world-2">Hello World 2</a></li></ol>
+`
 		if got != want {
 			t.Errorf("got %q, want %q", got, want)
 		}

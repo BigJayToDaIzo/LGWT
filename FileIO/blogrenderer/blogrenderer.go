@@ -3,10 +3,12 @@ package blogrenderer
 import (
 	"embed"
 	"errors"
-	"fmt"
 	"html/template"
 	"io"
 	"strings"
+
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 // temp configuration point read in from file/http eventually
@@ -26,7 +28,8 @@ func (p Post) SanitisedTitle() string {
 
 // improve benchmarks
 type PostRenderer struct {
-	templ *template.Template
+	templ    *template.Template
+	mdParser *parser.Parser
 }
 
 func NewPostRenderer() (*PostRenderer, error) {
@@ -34,7 +37,9 @@ func NewPostRenderer() (*PostRenderer, error) {
 	if err != nil {
 		return nil, errors.New("error parsing templates from filesys")
 	}
-	return &PostRenderer{templ: templ}, nil
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
+	parser := parser.NewWithExtensions(extensions)
+	return &PostRenderer{templ: templ, mdParser: parser}, nil
 }
 
 func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
@@ -42,8 +47,16 @@ func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
 }
 
 func (r *PostRenderer) Render(w io.Writer, post Post) error {
-	if err := r.templ.ExecuteTemplate(w, "blog.gohtml", post); err != nil {
-		return fmt.Errorf("error executing template: %w", err)
-	}
-	return nil
+	return r.templ.ExecuteTemplate(w, "blog.gohtml", newPostVM(p, r))
+}
+
+type postViewModel struct {
+	Post
+	HTMLBody template.HTML
+}
+
+func newPostVM(p Post, r *PostRenderer) postViewModel {
+	vm := postViewModel{Post: p}
+	vm.HTMLBody = template.HTML(markdown.ToHTML([]byte(p.Body), r.mdParser, nil))
+	return vm
 }
