@@ -27,11 +27,10 @@ func SumAllTails(tailsToSum ...[]int) []int {
 	return Reduce(tailsToSum, sumTail, []int{})
 }
 
-func Reduce[A any](collection []A, f func(A, A) A, initialValue A) A {
+func Reduce[A, B any](collection []A, f func(B, A) B, initialValue B) B {
 	var result = initialValue
 	for _, x := range collection {
 		result = f(result, x)
 	}
 	return result
-
 }
