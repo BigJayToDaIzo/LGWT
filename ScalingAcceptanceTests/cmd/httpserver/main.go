@@ -3,10 +3,10 @@ package main
 import (
 	"net/http"
 
-	gsg "example.com/go-specs-greet"
+	"example.com/go-specs-greet/adapters/httpserver"
 )
 
 func main() {
-	handler := http.HandlerFunc(gsg.Handler)
+	handler := http.HandlerFunc(httpserver.Handler)
 	http.ListenAndServe(":8080", handler)
 }
