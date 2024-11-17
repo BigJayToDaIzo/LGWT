@@ -2,6 +2,7 @@ package grpcserver
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
 	"example.com/go-specs-greet/domain/interactions"
@@ -16,6 +17,8 @@ type Driver struct {
 	client         GreeterClient
 }
 
+func (d *Driver) Close() {}
+
 func (d *Driver) Greet(name string) (string, error) {
 	client, err := d.getClient()
 	if err != nil {
@@ -28,6 +31,21 @@ func (d *Driver) Greet(name string) (string, error) {
 		return "", err
 	}
 	return greeting.Message, nil
+}
+
+func (d *Driver) Curse(name string) (string, error) {
+	client, err := d.getClient()
+	if err != nil {
+		return "", err
+	}
+	greeting, err := client.Curse(context.Background(), &GreetRequest{
+		Name: name,
+	})
+	if err != nil {
+		return "", err
+	}
+	return greeting.Message, nil
+
 }
 
 func (d *Driver) getClient() (GreeterClient, error) {
@@ -45,4 +63,8 @@ type GreetServer struct {
 
 func (g GreetServer) Greet(ctx context.Context, request *GreetRequest) (*GreetReply, error) {
 	return &GreetReply{Message: interactions.Greet(request.Name)}, nil
+}
+
+func (g GreetServer) Curse(ctx context.Context, request *GreetRequest) (*GreetReply, error) {
+	return &GreetReply{Message: fmt.Sprintf("Go to FLORIDA, %s!", request.Name)}, nil
 }

@@ -21,3 +21,13 @@ type GreetAdapter func(name string) string
 func (g GreetAdapter) Greet(name string) (string, error) {
 	return g(name), nil
 }
+
+type MeanGreeter interface {
+	Curse(name string) (string, error)
+}
+
+func CurseSpecification(t *testing.T, meany MeanGreeter) {
+	got, err := meany.Curse("DeeNuh")
+	assert.NoError(t, err)
+	assert.Equal(t, got, "Go to FLORIDA, DeeNuh!")
+}
