@@ -2,34 +2,33 @@ package grpcserver
 
 import (
 	"context"
-	"fmt"
 	"sync"
 
-	"example.com/go-specs-greet/domain/interactions"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 type Driver struct {
-	Addr           string
+	Addr string
+
 	connectionOnce sync.Once
 	conn           *grpc.ClientConn
 	client         GreeterClient
 }
-
-func (d *Driver) Close() {}
 
 func (d *Driver) Greet(name string) (string, error) {
 	client, err := d.getClient()
 	if err != nil {
 		return "", err
 	}
+
 	greeting, err := client.Greet(context.Background(), &GreetRequest{
 		Name: name,
 	})
 	if err != nil {
 		return "", err
 	}
+
 	return greeting.Message, nil
 }
 
@@ -38,14 +37,21 @@ func (d *Driver) Curse(name string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	greeting, err := client.Curse(context.Background(), &GreetRequest{
+
+	greeting, err := client.Curse(context.Background(), &CurseRequest{
 		Name: name,
 	})
 	if err != nil {
 		return "", err
 	}
-	return greeting.Message, nil
 
+	return greeting.Message, nil
+}
+
+func (d *Driver) Close() {
+	if d.conn != nil {
+		d.conn.Close()
+	}
 }
 
 func (d *Driver) getClient() (GreeterClient, error) {
@@ -55,16 +61,4 @@ func (d *Driver) getClient() (GreeterClient, error) {
 		d.client = NewGreeterClient(d.conn)
 	})
 	return d.client, err
-}
-
-type GreetServer struct {
-	UnimplementedGreeterServer
-}
-
-func (g GreetServer) Greet(ctx context.Context, request *GreetRequest) (*GreetReply, error) {
-	return &GreetReply{Message: interactions.Greet(request.Name)}, nil
-}
-
-func (g GreetServer) Curse(ctx context.Context, request *GreetRequest) (*GreetReply, error) {
-	return &GreetReply{Message: fmt.Sprintf("Go to FLORIDA, %s!", request.Name)}, nil
 }

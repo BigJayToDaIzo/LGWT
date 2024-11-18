@@ -8,9 +8,9 @@ import (
 	"github.com/alecthomas/assert/v2"
 )
 
-func TestGreet(t *testing.T) {
-	specs.GreetSpecification(t, specs.GreetAdapter(interactions.Greet))
+func TestCurse(t *testing.T) {
+	specs.CurseSpecification(t, specs.CurseAdapter(interactions.Curse))
 	t.Run("default name to world if it's an empty string", func(t *testing.T) {
-		assert.Equal(t, "Hello, World", interactions.Greet(""))
+		assert.Equal(t, "Go to FLORIDA, World!", interactions.Curse(""))
 	})
 }

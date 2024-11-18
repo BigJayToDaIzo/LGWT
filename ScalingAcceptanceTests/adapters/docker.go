@@ -12,24 +12,22 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
+const (
+	startupTimeout = 5 * time.Second
+	dockerfileName = "Dockerfile"
+)
+
 func StartDockerServer(
 	t testing.TB,
 	port string,
 	binToBuild string,
 ) {
-	ctx := context.Background()
 	t.Helper()
+	ctx := context.Background()
 	req := tc.ContainerRequest{
-		FromDockerfile: tc.FromDockerfile{
-			Context:    "../../.",
-			Dockerfile: "Dockerfile",
-			BuildArgs: map[string]*string{
-				"bin_to_build": &binToBuild,
-			},
-			PrintBuildLog: true,
-		},
-		ExposedPorts: []string{fmt.Sprintf("%s:%s", port, port)},
-		WaitingFor:   wait.ForListeningPort(nat.Port(port)).WithStartupTimeout(5 * time.Second),
+		FromDockerfile: newTCDockerfile(binToBuild),
+		ExposedPorts:   []string{fmt.Sprintf("%s:%s", port, port)},
+		WaitingFor:     wait.ForListeningPort(nat.Port(port)).WithStartupTimeout(startupTimeout),
 	}
 	container, err := tc.GenericContainer(ctx, tc.GenericContainerRequest{
 		ContainerRequest: req,
@@ -39,4 +37,15 @@ func StartDockerServer(
 	t.Cleanup(func() {
 		assert.NoError(t, container.Terminate(ctx))
 	})
+}
+
+func newTCDockerfile(binToBuild string) tc.FromDockerfile {
+	return tc.FromDockerfile{
+		Context:    "../../.",
+		Dockerfile: dockerfileName,
+		BuildArgs: map[string]*string{
+			"bin_to_build": &binToBuild,
+		},
+		PrintBuildLog: true,
+	}
 }
